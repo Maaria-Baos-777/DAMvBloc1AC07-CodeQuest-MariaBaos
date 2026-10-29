@@ -36,25 +36,26 @@ public class Program
         const string RankArkaNullPointer = "You obtain rank Arka Nullpointer";
         const string RankElarionBrases = "You obtain rank Elarion of the Brases";
         const string RankItbWizard = "You obtain rank ITB-Wizard the grey";
-        
+
         //Chapter2
+        const string MessageLevelTwo = "Your wizard {0} must obtain the treasure hidden within the dungeon of the dragon. Where every door is protected by a digital access code";
+        const string MessageDoors = "They are 3 doors, each one have a code random between 1 and 5. You have 3 try for each door";
+        const string MessageDoorAndTry = "You are in door {0}, you have {1} attemps left";
+        const string MessageFailDoor = "The dragon 🐲 has detected your presence and has kicked you from the server!";
+        const string MessageUnlokDoor = "The dragon 🐲 respects you. You have unlocked the next level!";
+        const string MessageUnlockLastLevel = "You have unlocked the final level. You can keep the dragon's 🐲 treasure 💎!";
+        const string MessageNumber = "Enter the door number: ";
 
         //Chapter3
 
         // Valor centinella: -1 NO és una opció vàlida.
         // El necessitem perquè el compilador no garanteix que 'option' s'assigni
         // dins del try (pot saltar una excepció abans d'arribar a l'assignació).
-        int option = -1;
-        bool isValid;
 
-        string userMageName;
-        int days = 5;
-        int hours;
-        int dailyPower = 0;
-        int totalPower = 0;
-        int level = 1;
-        int levelBefore;
         Random random = new Random();
+        int option = -1, days = 5, hours, dailyPower = 0, totalPower = 0, level = 1, levelBefore, numberUserDoor, doorCode, attemps = 3, doors = 1;
+        bool isValid, doorFound = false, doorFail = false;
+        string userMageName = "";
 
         do
         {
@@ -114,7 +115,7 @@ public class Program
                 case 1:
                     Console.Write(NameMage);
                     userMageName = Console.ReadLine();
-                    for(int i = 1; i <= days; i++)
+                    for(int i = 1; i <= days; i++) //days
                     {
                         hours = random.Next(1, 25);
                         dailyPower = random.Next(1, 11);
@@ -151,6 +152,44 @@ public class Program
                     {
                         Console.WriteLine(MessageReachedRankMaster);
                         Console.WriteLine(RankItbWizard);
+                    }
+                    break;
+                case 2:
+                    Console.WriteLine(MessageLevelTwo, userMageName);
+                    Console.WriteLine(MessageDoors);
+                    while(doors <= 3 && !doorFail)
+                    {
+                        doorFound = false;
+                        while (attemps > 0 && !doorFound)
+                        {
+                            doorCode = random.Next(1, 6);
+                            Console.WriteLine(MessageDoorAndTry, doors, attemps);
+                            Console.Write(MessageNumber);
+                            numberUserDoor = Convert.ToInt32(Console.ReadLine());
+                            if (numberUserDoor == doorCode)
+                            {
+                                doorFound = true;
+                                Console.WriteLine(MessageUnlokDoor);
+                            }
+                            else
+                            {
+                                attemps--;
+                            }
+                            
+                        }
+                        if (!doorFound)
+                        {
+                            Console.WriteLine(MessageFailDoor);
+                            doorFail = true;
+                        }
+                        else
+                        {
+                            doors++;
+                        }
+                    }
+                    if (!doorFail && doors > 3)
+                    {
+                        Console.WriteLine(MessageUnlockLastLevel);
                     }
                     break;
             }
